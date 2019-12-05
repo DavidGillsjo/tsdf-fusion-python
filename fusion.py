@@ -38,6 +38,9 @@ class TSDFVolume(object):
         #Set GPU_MODE
         self.gpu_mode = use_gpu and FUSION_GPU_MODE
 
+        #Create mask for view
+        self._frustum_mask = np.zeros(self._vol_dim, dtype=np.bool)
+
 
         # Copy voxel volumes to GPU
         if self.gpu_mode:
@@ -223,6 +226,8 @@ class TSDFVolume(object):
                         np.logical_and(pix_y < im_h,
                                        cam_pts[2,:] > 0))))
 
+            self._frustum_mask[vox_coords[0,valid_pix],vox_coords[1,valid_pix],vox_coords[2,valid_pix]] = True
+
             depth_val = np.zeros(pix_x.shape)
             depth_val[valid_pix] = depth_im[pix_y[valid_pix],pix_x[valid_pix]]
 
@@ -276,6 +281,12 @@ class TSDFVolume(object):
         colors = np.floor(np.asarray([colors_r,colors_g,colors_b])).T
         colors = colors.astype(np.uint8)
         return verts,faces,norms,colors
+
+    def get_frustum_mask(self):
+        if self.gpu_mode:
+            raise NotImplementedError
+        else:
+            return self._frustum_mask
 
 
 # -------------------------------------------------------------------------------
