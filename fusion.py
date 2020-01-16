@@ -31,7 +31,7 @@ class TSDFVolume(object):
         print("Voxel volume size: %d x %d x %d"%(self._vol_dim[0],self._vol_dim[1],self._vol_dim[2]))
 
         # Initialize pointers to voxel volume in CPU memory
-        self._tsdf_vol_cpu = np.ones(self._vol_dim).astype(np.float32)
+        self._tsdf_vol_cpu = -1*np.ones(self._vol_dim).astype(np.float32)
         self._weight_vol_cpu = np.zeros(self._vol_dim).astype(np.float32) # for computing the cumulative moving average of observations per voxel
         self._color_vol_cpu = np.zeros(self._vol_dim).astype(np.float32)
 
